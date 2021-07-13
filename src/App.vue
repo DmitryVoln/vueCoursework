@@ -25,17 +25,17 @@ export default {
         {
           date: '13.07.21',
           category: 'sport',
-          cost: 200,
+          value: 200,
         },
         {
           date: '13.07.21',
           category: 'food',
-          cost: 150,
+          value: 150,
         },
         {
           date: '13.07.21',
           category: 'hobby',
-          cost: 130,
+          value: 130,
         },
       ]
     },
