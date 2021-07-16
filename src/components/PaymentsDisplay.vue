@@ -6,7 +6,8 @@
                 <tr><td>{{idx}}</td><td>{{item.date}}</td><td>{{item.category}}</td><td>{{item.value}}</td></tr> 
             </table>
         </div>
-        <div class="table">
+        <div class="sum">
+            {{ getFPV }}
         </div>
     </div>
 </template>
@@ -23,7 +24,14 @@ export default {
         return {
 
         }
+    },
+    methods: {
 
+    },
+    computed: {
+      getFPV() {
+        return this.$store.getters.getFullPaymentsValue;
+      }
     }
 }
 </script>

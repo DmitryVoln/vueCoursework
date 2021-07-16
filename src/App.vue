@@ -4,48 +4,86 @@
     <add-payment v-on:addNewPayment="addData"/>
     <br/>
     <paymentsDisplay v-bind:list="paymentsList"/>
+    <br/>
+    <selectCategory v-bind:categories="getCategoryList()"/>
   </div>
 </template>
 
 <script>
 import PaymentsDisplay from './components/PaymentsDisplay.vue';
 import addPayment from './components/addPayment.vue';
+import selectCategory from './components/selectCategory.vue'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'App',
   components: {
     PaymentsDisplay,
     addPayment,
+    selectCategory,
   },
   data: () => ({
-    paymentsList: []
+
   }),
   methods: {
-    fetchData() {
-      return [
-        {
-          date: '13.07.21',
-          category: 'sport',
-          value: 200,
-        },
-        {
-          date: '13.07.21',
-          category: 'food',
-          value: 150,
-        },
-        {
-          date: '13.07.21',
-          category: 'hobby',
-          value: 130,
-        },
-      ]
-    },
+    ...mapMutations([
+      'setPaymentsListData',
+      'addDataToPaymentsList'
+      ]),
+    ...mapGetters([
+      'getPaymentsList',
+      'getCategoryList'
+      ]),
+      ...mapActions([
+        'fetchData',
+        'loadCategories',
+      ]),
+    //or:
+    // getPaymentsList() {
+    //  return this.$store.getters.getPaymentsList;
+    // }
+    // fetchData() {
+    //   return [
+    //     {
+    //       date: '13.07.21',
+    //       category: 'sport',
+    //       value: 200,
+    //     },
+    //     {
+    //       date: '13.07.21',
+    //       category: 'food',
+    //       value: 150,
+    //     },
+    //     {
+    //       date: '13.07.21',
+    //       category: 'hobby',
+    //       value: 130,
+    //     },
+    //   ]
+    // },
     addData(data) {
-      this.paymentsList.push(data);
+      this.addDataToPaymentsList(data);
     }
-  },  //created hook:
+  },
+  computed: {
+    getFPV() {
+      return this.$store.getters.getFullPaymentsValue;
+    },
+    paymentsList() {
+      return this.getPaymentsList();
+    }
+  },
+  //created hook:
   created() {
-    this.paymentsList = this.fetchData()
-  }
+    this.fetchData();
+    if (!this.getCategoryList.length) {
+     this.loadCategories()
+   }
+    // this.$store.commit('setPaymentsListData', this.fetchData());
+  },
+  mounted () {
+   
+ }
+
 }
 </script>
 
