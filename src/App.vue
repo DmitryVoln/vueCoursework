@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <h3>My App</h3>
-    <add-payment v-model="category" v-on:addNewPayment="addData"></add-payment>
+    <add-payment v-on:addNewPayment="addData"></add-payment>
     <selectCategory v-bind:categories="getCategoryList()" v-on:addCategory="addCat"/>
     <br/>
     <paymentsDisplay v-bind:list="paymentsList"/>
     <br/>
+    <pagination v-bind:pageCount="fetchPageCount"
+    v-on:changePage="actualPage"/>
   </div>
 </template>
 
@@ -14,15 +16,18 @@ import PaymentsDisplay from './components/PaymentsDisplay.vue';
 import addPayment from './components/addPayment.vue';
 import selectCategory from './components/selectCategory.vue'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
+import Pagination from './components/Pagination.vue';
 export default {
   name: 'App',
   components: {
     PaymentsDisplay,
     addPayment,
     selectCategory,
+    Pagination,
   },
   data() {
     return {
+      page: 0,
       category: '',
     }
   },
@@ -34,7 +39,8 @@ export default {
       ]),
     ...mapGetters([
       'getPaymentsList',
-      'getCategoryList'
+      'getCategoryList',
+      'getPageCount',
       ]),
       ...mapActions([
         'fetchData',
@@ -66,10 +72,13 @@ export default {
     addData(data) {
       data.category = this.category;
       this.addDataToPaymentsList(data);
+
     },
     addCat(data) {
       this.category = data;
-      console.log(this.category)
+    },
+    actualPage(page) {
+      this.page = page;
     }
   },
   computed: {
@@ -77,15 +86,18 @@ export default {
       return this.$store.getters.getFullPaymentsValue;
     },
     paymentsList() {
-      return this.getPaymentsList();
+        return this.getPaymentsList().slice((this.page * 10), (this.page * 10 + 10));
+    },
+    fetchPageCount() {
+      return this.getPageCount();
     }
   },
   //created hook:
   created() {
     this.fetchData();
     if (!this.getCategoryList.length) {
-     this.loadCategories()
-   }
+     this.loadCategories();
+    }
     // this.$store.commit('setPaymentsListData', this.fetchData());
   },
   mounted () {
