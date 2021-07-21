@@ -1,6 +1,6 @@
 <template>
 <div>
-    <select v-model="selected">
+    <select v-model="selected" v-on:change="ret" aria-placeholder="category">
         <option v-for="(item, idx) in categories" v-bind:key="idx">
             {{ item }}
         </option>
@@ -23,9 +23,11 @@ export default {
             selected: '',
         }
     },
-    computed: {
+    methods: {
         ret() {
-            return console.log(this.selected)
+            this.$emit('addCategory', this.selected)
+    },
+    computed: {
         }
     }
 }

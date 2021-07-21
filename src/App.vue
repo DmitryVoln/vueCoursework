@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <h3>My App</h3>
-    <add-payment v-on:addNewPayment="addData"/>
+    <add-payment v-model="category" v-on:addNewPayment="addData"></add-payment>
+    <selectCategory v-bind:categories="getCategoryList()" v-on:addCategory="addCat"/>
     <br/>
     <paymentsDisplay v-bind:list="paymentsList"/>
     <br/>
-    <selectCategory v-bind:categories="getCategoryList()"/>
   </div>
 </template>
 
@@ -21,13 +21,16 @@ export default {
     addPayment,
     selectCategory,
   },
-  data: () => ({
-
-  }),
+  data() {
+    return {
+      category: '',
+    }
+  },
   methods: {
     ...mapMutations([
       'setPaymentsListData',
-      'addDataToPaymentsList'
+      'addDataToPaymentsList',
+      'addCategoryToList',
       ]),
     ...mapGetters([
       'getPaymentsList',
@@ -61,7 +64,12 @@ export default {
     //   ]
     // },
     addData(data) {
+      data.category = this.category;
       this.addDataToPaymentsList(data);
+    },
+    addCat(data) {
+      this.category = data;
+      console.log(this.category)
     }
   },
   computed: {

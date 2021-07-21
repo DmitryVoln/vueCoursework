@@ -1,8 +1,7 @@
 <template>
     <div class="newPayment">
         <input type="text" v-model="date" placeholder="date"/>
-        <input type="text" v-model="category" placeholder="category"/>
-        <input type="number" v-model="value" placeholder="value"/>
+        <input type="number" v-model.number="value" placeholder="value"/>
         <button v-on:click="onclick">Add Data</button>
     </div>
 </template>
@@ -13,11 +12,11 @@ export default {
     data(){
         return {
             date: "",
-            category: "",
+            category: null,
             value: null,
         }
 
-    },
+    }, 
     methods: {
         onclick() {
             const { category, value } = this;
@@ -27,13 +26,15 @@ export default {
                 value,
             }
             this.$emit('addNewPayment', data);
-        }
+        },
     },
+
+    
     computed: {
         getCurrentDate() {
             const date = new Date();
             const day = date.getDate();
-            const month = date.getMonth() + 1;
+            const month = date.getMonth() > 8 ? date.getMonth() + 1 : (`0${date.getMonth() + 1}`);
             const year = date.getFullYear();
             return `${day}.${month}.${year}`;
         },

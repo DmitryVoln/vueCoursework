@@ -20,6 +20,10 @@ export default new Vuex.Store({
                 state.categoryList = [payload];
             }
             state.categoryList.push(...payload)
+        },
+        addCategoryToList(state, payload) {
+            let last = state.paymentsList.length - 1;
+            state.paymentsList[last].category = payload;
         }
     },
     getters: {
@@ -37,23 +41,15 @@ export default new Vuex.Store({
         fetchData({commit}) {
             return  new Promise((resolve) => {
                 setTimeout(() => {
-                        resolve([
-                          {
-                            date: '13.07.21',
-                            category: 'sport',
-                            value: 200,
-                          },
-                          {
-                            date: '13.07.21',
-                            category: 'food',
-                            value: 150,
-                          },
-                          {
-                            date: '13.07.21',
-                            category: 'hobby',
-                            value: 130,
-                          },
-                        ])
+                        const result = [];
+                        for (let i = 0; i < 51; i++) {
+                            result.push({
+                                date: '13.07.2021',
+                                category: 'sport',
+                                value: 200,
+                              })
+                        }
+                        resolve(result);
                 }, 2000)
             } ).then((data) => commit('setPaymentsListData', data))
         },
